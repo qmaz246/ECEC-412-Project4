@@ -6,6 +6,8 @@ const unsigned block_size = 64; // Size of a cache line (in Bytes)
 const unsigned cache_size = 2048; // Size of a cache (in KB)
 // TODO, you should try different association configurations, for example 4, 8, 16
 const unsigned assoc = 16;
+// Also use to hash the PC value
+
 
 Cache *initCache()
 {
@@ -16,6 +18,7 @@ Cache *initCache()
     unsigned num_blocks = cache_size * 1024 / block_size;
     cache->num_blocks = num_blocks;
 //    printf("Num of blocks: %u\n", cache->num_blocks);
+
 
     // Initialize all cache blocks
     cache->blocks = (Cache_Block *)malloc(num_blocks * sizeof(Cache_Block));
@@ -29,6 +32,7 @@ Cache *initCache()
         cache->blocks[i].when_touched = 0;
         cache->blocks[i].frequency = 0;
     }
+
 
     // Initialize Set-way variables
     unsigned num_sets = cache_size * 1024 / (block_size * assoc);
@@ -47,6 +51,7 @@ Cache *initCache()
     unsigned tag_shift = set_shift + log2(num_sets);
     cache->tag_shift = tag_shift;
 //    printf("Tag shift: %u\n", cache->tag_shift);
+
 
     // Initialize Sets
     cache->sets = (Set *)malloc(num_sets * sizeof(Set));
@@ -68,6 +73,16 @@ Cache *initCache()
 
         cache->sets[set].ways[way] = blk;
     }
+
+
+	// Initialize the Counters
+	cache->SHCT = (Sat_Counter *)malloc((2^assoc) * sizeof(Sat_Counter));
+	int i = 0;
+    	for (i = 0; i < (2^assoc); i++)
+    	{
+        	cache->SHCT[i].counter = 0;
+    	}
+
 
     return cache;
 }

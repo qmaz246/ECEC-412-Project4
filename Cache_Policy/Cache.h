@@ -14,6 +14,7 @@
 
 //#define LRU
 #define LFU
+//#define SHU
 
 /* Cache */
 typedef struct Set
@@ -37,8 +38,18 @@ typedef struct Cache
     unsigned tag_shift; // To extract tag
 
     Set *sets; // All the sets of a cache
+
+    // Added for SHiP
+    Sat_Counter *SHCT; // Signature Hit Counter Table
+    
     
 }Cache;
+
+/* Signature Hit */
+typedef struct Sat_Counter
+{
+    uint16_t counter;
+}Sat_Counter;
 
 // Function Definitions
 Cache *initCache();
