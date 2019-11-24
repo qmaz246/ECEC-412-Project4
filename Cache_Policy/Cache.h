@@ -22,6 +22,12 @@ typedef struct Set
     Cache_Block **ways; // Block ways within a set
 }Set;
 
+/* Signature Hit */
+typedef struct Sat_Counter
+{
+    uint16_t counter;
+}Sat_Counter;
+
 typedef struct Cache
 {
     uint64_t blk_mask;
@@ -41,15 +47,12 @@ typedef struct Cache
 
     // Added for SHiP
     Sat_Counter *SHCT; // Signature Hit Counter Table
-    
+    unsigned numCounters;    
+    unsigned countMask;
     
 }Cache;
 
-/* Signature Hit */
-typedef struct Sat_Counter
-{
-    uint16_t counter;
-}Sat_Counter;
+
 
 // Function Definitions
 Cache *initCache();

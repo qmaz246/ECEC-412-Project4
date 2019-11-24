@@ -26,10 +26,11 @@ bool getRequest(TraceParser *mem_trace)
         // Extract PC
         ptr = strtok(NULL, delim);
         uint64_t PC = convToUint64(ptr);
-	printf("%ld\n", PC);
+//	printf("%ld\n", PC);
         // Extract Load or Store Address
         ptr = strtok(NULL, delim);
         uint64_t load_or_store_addr = convToUint64(ptr);
+//	printf("addr: %ld\n", load_or_store_addr);
         // Extract Request Type
         ptr = strtok(NULL, delim);
         Request_Type req_type;
