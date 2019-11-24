@@ -3,8 +3,8 @@
 
 /* Constants */
 const unsigned block_size = 64; // Size of a cache line (in Bytes)
-const unsigned cache_size = 2048; // Size of a cache (in KB)
-const unsigned assoc = 16;
+const unsigned cache_size = 512; // Size of a cache (in KB)
+const unsigned assoc = 8;
 // Also use to hash the PC value
 
 
@@ -95,7 +95,7 @@ bool accessBlock(Cache *cache, Request *req, uint64_t access_time)
     uint64_t blk_aligned_addr = blkAlign(req->load_or_store_addr, cache->blk_mask);
 //    printf("blk_addr: %d\n", blk_aligned_addr);
 
-    uint64_t Signature = req->PC & ~cache->countMask >> assoc;
+    uint64_t Signature = req->PC & cache->countMask;
    //printf("Signature: %ld\n", Signature);
 
     Cache_Block *blk = findBlock(cache, blk_aligned_addr);
@@ -125,7 +125,7 @@ bool insertBlock(Cache *cache, Request *req, uint64_t access_time, uint64_t *wb_
 {
     // Step one, find a victim block
     uint64_t blk_aligned_addr = blkAlign(req->load_or_store_addr, cache->blk_mask);
-    uint64_t Signature = req->PC & ~cache->countMask >> assoc;
+    uint64_t Signature = req->PC & cache->countMask;
 
     Cache_Block *victim = NULL;
     bool wb_required = cache_policy(cache, blk_aligned_addr, &victim, wb_addr);
